@@ -3,12 +3,17 @@ package edu.object.java23object;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 
-public class HelloController {
+import java.net.URL;
+import java.util.List;
+import java.util.ResourceBundle;
+
+public class HelloController implements Initializable {
 
     final ObservableList<Person> data = FXCollections.observableArrayList(
             new Person("Jacob", "Smith", "jacob.smith@example.com"),
@@ -22,16 +27,16 @@ public class HelloController {
     private Label welcomeText;
 
     @FXML
-    private TableView tableView;
+    private TableView<Person> tableView;
 
     @FXML
-    private TableColumn firstName;
+    private TableColumn<Person, String> firstName;
 
     @FXML
-    private TableColumn lastName;
+    private TableColumn<Person, String> lastName;
 
     @FXML
-    private TableColumn email;
+    private TableColumn<Person, String> email;
 
     @FXML
     protected void onHelloButtonClick() {
@@ -40,6 +45,12 @@ public class HelloController {
 
     @FXML
     protected void onAddDataClick() {
+        System.out.println("Adding data");
+
+    }
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
         firstName.setCellValueFactory(
                 new PropertyValueFactory<Person,String>("firstName")
         );
@@ -49,11 +60,10 @@ public class HelloController {
         email.setCellValueFactory(
                 new PropertyValueFactory<Person,String>("email")
         );
-        System.out.println("Adding data");
-
+        tableView.getItems().setAll(getData());
     }
 
-    /*HelloController() {
-        System.out.println("INIT");
-    }*/
+    private List<Person> getData(){
+        return data.stream().toList();
+    }
 }
