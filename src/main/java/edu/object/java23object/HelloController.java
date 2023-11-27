@@ -69,3 +69,4 @@ public class HelloController implements Initializable {
         return data.stream().toList();
     }
 }
+private
