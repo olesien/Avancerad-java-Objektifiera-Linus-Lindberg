@@ -1,5 +1,8 @@
 package edu.object.java23object;
 
+import com.opencsv.CSVParser;
+import com.opencsv.CSVParserBuilder;
+import com.opencsv.CSVReaderBuilder;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -9,13 +12,19 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 
+import java.io.Reader;
 import java.net.URL;
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.security.spec.RSAOtherPrimeInfo;
 import java.util.List;
 import java.util.ResourceBundle;
+import com.opencsv.CSVReader;
 
 public class HelloController implements Initializable {
-
     final ObservableList<Person> data = FXCollections.observableArrayList(
+
             new Person("Jacob", "Smith", "jacob.smith@example.com"),
             new Person("Isabella", "Johnson", "isabella.johnson@example.com"),
             new Person("Ethan", "Williams", "ethan.williams@example.com"),
@@ -63,10 +72,33 @@ public class HelloController implements Initializable {
                 new PropertyValueFactory<Person,String>("email")
         );
         tableView.getItems().setAll(getData());
+
+        //Get data
+        try {
+            List<String[]> lines = readAllLines(FileSystems.getDefault().getPath("src", "data.csv"));
+            System.out.println(lines);
+        } catch (Exception err) {
+            System.out.println(err);
+        }
+
     }
 
     private List<Person> getData(){
         return data.stream().toList();
     }
+
+    public List<String[]> readAllLines(Path filePath) throws Exception {
+        try (Reader reader = Files.newBufferedReader(filePath)) {
+            CSVParser parser = new CSVParserBuilder()
+                    .withSeparator(',')
+                    .withIgnoreQuotations(true)
+                    .build();
+
+            CSVReader csvReader = new CSVReaderBuilder(reader)
+                    .withSkipLines(0)
+                    .withCSVParser(parser)
+                    .build();
+            return csvReader.readAll();
+        }
+    }
 }
-private
