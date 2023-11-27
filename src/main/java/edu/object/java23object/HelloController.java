@@ -46,6 +46,8 @@ public class HelloController implements Initializable {
     @FXML
     protected void onAddDataClick() {
         System.out.println("Adding data");
+        data.add( new Person("Linus", "Lindberg", "linus-lindberg@outlook.com"));
+        tableView.getItems().setAll(getData());
 
     }
 
