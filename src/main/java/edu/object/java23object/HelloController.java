@@ -18,18 +18,14 @@ import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.security.spec.RSAOtherPrimeInfo;
+import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
 import com.opencsv.CSVReader;
 
 public class HelloController implements Initializable {
-    final ObservableList<Person> data = FXCollections.observableArrayList(
 
-            new Person("Jacob", "Smith", "jacob.smith@example.com"),
-            new Person("Isabella", "Johnson", "isabella.johnson@example.com"),
-            new Person("Ethan", "Williams", "ethan.williams@example.com"),
-            new Person("Emma", "Jones", "emma.jones@example.com"),
-            new Person("Michael", "Brown", "michael.brown@example.com")
+    ObservableList<Person> data = FXCollections.observableArrayList(
     );
 
     @FXML
@@ -71,20 +67,67 @@ public class HelloController implements Initializable {
         email.setCellValueFactory(
                 new PropertyValueFactory<Person,String>("email")
         );
-        tableView.getItems().setAll(getData());
+
 
         //Get data
         try {
-            List<String[]> lines = readAllLines(FileSystems.getDefault().getPath("src", "data.csv"));
-            System.out.println(lines);
+            parseLines(readAllLines(FileSystems.getDefault().getPath("src", "data.csv")));
         } catch (Exception err) {
             System.out.println(err);
         }
+        tableView.getItems().setAll(getData());
 
     }
 
     private List<Person> getData(){
         return data.stream().toList();
+    }
+
+    public void parseLines (List<String[]> lines) {
+        ObservableList<Person> newData = FXCollections.observableArrayList();
+
+        int firstNameIndex = 0;
+        int lastNameIndex = 1;
+        int emailIndex = 1;
+        for (int rowI = 0; rowI < lines.size(); rowI++) {
+            String[] line = lines.get(rowI);
+            if (rowI == 0) {
+
+                //Get columns and map them with their indexes.
+                for (int colI = 0; colI < line.length; colI++) {
+                    String value = line[colI];
+                    switch (value) {
+                        case "FirstName":
+                            firstNameIndex = colI;
+                        case "LastName":
+                            lastNameIndex = colI;
+                        case "Email":
+                            emailIndex = colI;
+                    }
+                }
+            } else {
+                //Map rows
+                String firstName = "";
+                String lastName = "";
+                String email = "";
+
+                for (int colI = 0; colI < line.length; colI++) {
+                    String value = line[colI];
+                    if (firstNameIndex == colI) {
+                        firstName = value;
+                    }
+                    if (lastNameIndex == colI) {
+                        lastName = value;
+                    }
+                    if (emailIndex == colI) {
+                        email = value;
+                    }
+                }
+                newData.add(new Person(firstName, lastName, email));
+            }
+
+        }
+        data = newData;
     }
 
     public List<String[]> readAllLines(Path filePath) throws Exception {
@@ -98,7 +141,10 @@ public class HelloController implements Initializable {
                     .withSkipLines(0)
                     .withCSVParser(parser)
                     .build();
-            return csvReader.readAll();
+
+            List<String[]> lines =  csvReader.readAll();
+            csvReader.close();
+            return lines;
         }
     }
 }
