@@ -209,12 +209,15 @@ public class Controller {
                 public void handle(ActionEvent t) {
                     // get Selected Item
                     System.out.println("Deleting");
-                    int selectdIndex = getTableRow().getIndex();
-                    Order currentOrder = (Order)tableView.getItems().get(selectdIndex);
-                    //remove selected item from the table list
-                    data.remove(currentOrder);
-                    refresh();
-                    save();
+                    int selectedIndex = getTableRow().getIndex();
+                    if (selectedIndex > -1) {
+                        Order currentOrder = tableView.getItems().get(selectedIndex);
+                        //remove selected item from the table list
+                        data.remove(currentOrder);
+                        refresh();
+                        save();
+                    }
+
                 }
             });
         }
@@ -223,7 +226,9 @@ public class Controller {
         @Override
         protected void updateItem(Boolean t, boolean empty) {
             super.updateItem(t, empty);
-            if(!empty){
+            if (empty || getTableRow() == null || getTableRow().getIndex() >= tableView.getItems().size()) {
+                setGraphic(null);
+            } else {
                 setGraphic(cellButton);
             }
         }
