@@ -22,6 +22,7 @@ import java.util.ResourceBundle;
 import com.opencsv.CSVReader;
 
 public class Controller implements Initializable {
+    CsvFileReader csvFileReader = new CsvFileReader();
 
     ObservableList<Person> data = FXCollections.observableArrayList(
     );
@@ -69,7 +70,7 @@ public class Controller implements Initializable {
 
         //Get data
         try {
-            parseLines(readAllLines(FileSystems.getDefault().getPath("src", "data.csv")));
+            data = csvFileReader.parseLines(csvFileReader.readAllLines(FileSystems.getDefault().getPath("src", "data.csv")));
         } catch (Exception err) {
             System.out.println(err);
         }
@@ -79,70 +80,5 @@ public class Controller implements Initializable {
 
     private List<Person> getData(){
         return data.stream().toList();
-    }
-
-    public void parseLines (List<String[]> lines) {
-        ObservableList<Person> newData = FXCollections.observableArrayList();
-
-        int firstNameIndex = 0;
-        int lastNameIndex = 1;
-        int emailIndex = 1;
-        for (int rowI = 0; rowI < lines.size(); rowI++) {
-            String[] line = lines.get(rowI);
-            if (rowI == 0) {
-
-                //Get columns and map them with their indexes.
-                for (int colI = 0; colI < line.length; colI++) {
-                    String value = line[colI];
-                    switch (value) {
-                        case "FirstName":
-                            firstNameIndex = colI;
-                        case "LastName":
-                            lastNameIndex = colI;
-                        case "Email":
-                            emailIndex = colI;
-                    }
-                }
-            } else {
-                //Map rows
-                String firstName = "";
-                String lastName = "";
-                String email = "";
-
-                for (int colI = 0; colI < line.length; colI++) {
-                    String value = line[colI];
-                    if (firstNameIndex == colI) {
-                        firstName = value;
-                    }
-                    if (lastNameIndex == colI) {
-                        lastName = value;
-                    }
-                    if (emailIndex == colI) {
-                        email = value;
-                    }
-                }
-                newData.add(new Person(firstName, lastName, email));
-            }
-
-        }
-        data = newData;
-    }
-
-    public List<String[]> readAllLines(Path filePath) throws Exception {
-        try (Reader reader = Files.newBufferedReader(filePath)) {
-            CSVParser parser = new CSVParserBuilder()
-                    .withSeparator(',')
-                    .withIgnoreQuotations(true)
-                    .build();
-
-            CSVReader csvReader = new CSVReaderBuilder(reader)
-                    .withSkipLines(0)
-                    .withCSVParser(parser)
-                    .build();
-
-            List<String[]> lines =  csvReader.readAll();
-            csvReader.close();
-            return lines;
-        }
     }
 }
