@@ -19,6 +19,11 @@ public class CsvReadWriter {
         int orderDateIndex = 0;
         int regionIndex = 1;
         int rep1index = 2;
+        int rep2index = 0;
+        int itemIndex = 1;
+        int unitsIndex = 2;
+        int unitCostIndex = 0;
+        int totalIndex = 1;
         for (int rowI = 0; rowI < lines.size(); rowI++) {
             String[] line = lines.get(rowI);
             if (rowI == 0) {
@@ -33,6 +38,16 @@ public class CsvReadWriter {
                             regionIndex = colI;
                         case "Rep1":
                             rep1index = colI;
+                        case "Rep2":
+                            rep2index = colI;
+                        case "Item":
+                            itemIndex = colI;
+                        case "Units":
+                            unitsIndex = colI;
+                        case "UnitCost":
+                            unitCostIndex = colI;
+                        case "Total":
+                            totalIndex = colI;
                     }
                 }
             } else {
@@ -40,6 +55,11 @@ public class CsvReadWriter {
                 String orderDate = "";
                 String region = "";
                 String rep1 = "";
+                String rep2 = "";
+                String item = "";
+                String units = "";
+                String unitCost = "";
+                String total = "";
 
                 for (int colI = 0; colI < line.length; colI++) {
                     String value = line[colI];
@@ -52,8 +72,24 @@ public class CsvReadWriter {
                     if (rep1index == colI) {
                         rep1 = value;
                     }
+
+                    if (rep2index == colI) {
+                        rep2 = value;
+                    }
+                    if (itemIndex == colI) {
+                        item = value;
+                    }
+                    if (unitsIndex == colI) {
+                        units = value;
+                    }
+                    if (unitCostIndex == colI) {
+                        units = value;
+                    }
+                    if (totalIndex == colI) {
+                        total = value;
+                    }
                 }
-                newData.add(new Order(orderDate, region, rep1));
+                newData.add(new Order(orderDate, region, rep1, rep2, item, units, unitCost, total));
             }
 
         }

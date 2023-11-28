@@ -59,7 +59,7 @@ public class Controller implements Initializable {
     @FXML
     protected void onAddDataClick() {
         System.out.println("Adding data");
-        data.add( new Order("Linus", "Lindberg", "linus-lindberg@outlook.com"));
+        //data.add( new Order("Linus", "Lindberg", "linus-lindberg@outlook.com"));
         tableView.getItems().setAll(getData());
         String[] columns = {"firstName", "lastName", "email"};
         try {
