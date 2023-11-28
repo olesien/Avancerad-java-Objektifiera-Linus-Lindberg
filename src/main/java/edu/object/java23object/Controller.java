@@ -17,13 +17,11 @@ import java.net.URL;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.security.spec.RSAOtherPrimeInfo;
-import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
 import com.opencsv.CSVReader;
 
-public class HelloController implements Initializable {
+public class Controller implements Initializable {
 
     ObservableList<Person> data = FXCollections.observableArrayList(
     );
