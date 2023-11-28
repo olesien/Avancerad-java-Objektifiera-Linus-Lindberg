@@ -16,6 +16,7 @@ import java.util.ResourceBundle;
 
 public class Controller implements Initializable {
     CsvReadWriter csvFileReader = new CsvReadWriter();
+    JsonReadWrite json = new JsonReadWrite();
 
     ObservableList<Order> data = FXCollections.observableArrayList(
     );
@@ -61,9 +62,10 @@ public class Controller implements Initializable {
         System.out.println("Adding data");
         //data.add( new Order("Linus", "Lindberg", "linus-lindberg@outlook.com"));
         tableView.getItems().setAll(getData());
-        String[] columns = {"firstName", "lastName", "email"};
+        String[] columns = {"OrderDate", "Region", "Rep1", "Rep2", "Item", "Units", "UnitCost", "Total"};
         try {
             csvFileReader.saveCSV(columns, data);
+            json.saveJSON(data);
         } catch (Exception err) {
             System.out.println(err);
         }
@@ -109,7 +111,7 @@ public class Controller implements Initializable {
         }
         tableView.getItems().setAll(getData());
 
-        JsonReadWrite json = new JsonReadWrite();
+
         System.out.println(json.read());
 
     }
