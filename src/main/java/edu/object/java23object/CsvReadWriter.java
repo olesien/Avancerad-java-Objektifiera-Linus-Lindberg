@@ -1,18 +1,19 @@
 package edu.object.java23object;
 
-import com.opencsv.CSVParser;
-import com.opencsv.CSVParserBuilder;
-import com.opencsv.CSVReader;
-import com.opencsv.CSVReaderBuilder;
+import com.opencsv.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
+import java.io.FileWriter;
 import java.io.Reader;
+import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 
-public class CsvFileReader {
+public class CsvReadWriter {
     public ObservableList<Person> parseLines (List<String[]> lines) {
         ObservableList<Person> newData = FXCollections.observableArrayList();
 
@@ -76,5 +77,26 @@ public class CsvFileReader {
             csvReader.close();
             return lines;
         }
+    }
+
+    public List<String[]> writeAllLines(List<String[]> lines, Path path) throws Exception {
+        try (CSVWriter writer = new CSVWriter(new FileWriter(path.toString()))) {
+            writer.writeAll(lines);
+        }
+        return readAllLines(path);
+    }
+
+    public List<String[]>  saveCSV(String[] columns, ObservableList<Person> data) throws Exception {
+        List<String[]> lines = new ArrayList<>();
+        lines.add(columns);
+
+        //Add the rows
+        data.forEach(person -> {
+            String[] row = {person.getFirstName(), person.getLastName(), person.getEmail()};
+            lines.add(row);
+        });
+
+        Path path = FileSystems.getDefault().getPath("src", "data.csv");
+        return writeAllLines(lines, path);
     }
 }

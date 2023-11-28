@@ -1,8 +1,5 @@
 package edu.object.java23object;
 
-import com.opencsv.CSVParser;
-import com.opencsv.CSVParserBuilder;
-import com.opencsv.CSVReaderBuilder;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -12,17 +9,13 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 
-import java.io.Reader;
 import java.net.URL;
 import java.nio.file.FileSystems;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.List;
 import java.util.ResourceBundle;
-import com.opencsv.CSVReader;
 
 public class Controller implements Initializable {
-    CsvFileReader csvFileReader = new CsvFileReader();
+    CsvReadWriter csvFileReader = new CsvReadWriter();
 
     ObservableList<Person> data = FXCollections.observableArrayList(
     );
@@ -52,6 +45,13 @@ public class Controller implements Initializable {
         System.out.println("Adding data");
         data.add( new Person("Linus", "Lindberg", "linus-lindberg@outlook.com"));
         tableView.getItems().setAll(getData());
+        String[] columns = {"firstName", "lastName", "email"};
+        try {
+            csvFileReader.saveCSV(columns, data);
+        } catch (Exception err) {
+            System.out.println(err);
+        }
+
 
     }
 
