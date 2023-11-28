@@ -15,7 +15,7 @@ import javafx.collections.ObservableList;
 import org.json.*;
 
 public class JsonReadWrite {
-
+    private String[] alphabet = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q"}; //That'll do
     ObservableList<Order> read (Path path) {
         ObservableList<Order> newData = FXCollections.observableArrayList();
         try {
@@ -31,7 +31,6 @@ public class JsonReadWrite {
 
 
             JSONArray arr = new JSONArray(jsonString);
-            //String[] cols = {"A", "B", "C", "D", "E", "F", "G", "H"};
             for (int i = 0; i < arr.length(); i++)
             {
                 if (i != 0) { //Skip the first one as that is just the col heads
@@ -61,31 +60,28 @@ public class JsonReadWrite {
         return newData;
     }
 
-    void saveJSON(Path path, ObservableList<Order> data) {
+    void saveJSON(Path path, String[] columns, ObservableList<Order> data) {
         List<JSONObject> list = new ArrayList<>();
         //Column Head
         JSONObject jOb = new JSONObject();
-        jOb.put("A", "OrderDate");
-        jOb.put("B", "Region");
-        jOb.put("C", "Rep1");
-        jOb.put("D", "Rep2");
-        jOb.put("E", "Item");
-        jOb.put("F", "Units");
-        jOb.put("G", "UnitCost");
-        jOb.put("H", "Total");
+        for (int i = 0; i < columns.length; i++) { //To make it easier to scale later
+            String letter = alphabet[i];
+            String column = columns[i];
+            jOb.put(letter, column);
+        }
         list.add(jOb);
+
 
         //The rows below
         data.forEach(row -> {
+
             JSONObject jsonRow = new JSONObject();
-            jsonRow.put("A", row.getOrderDate());
-            jsonRow.put("B", row.getRegion());
-            jsonRow.put("C", row.getRep1());
-            jsonRow.put("D", row.getRep2());
-            jsonRow.put("E", row.getItem());
-            jsonRow.put("F", row.getUnits());
-            jsonRow.put("G", row.getUnitCost());
-            jsonRow.put("H", row.getTotal());
+            String[] orderArray = row.toCustomArray();
+            for (int i = 0; i < orderArray.length; i++) {
+                String letter = alphabet[i];
+                String cell = orderArray[i];
+                jsonRow.put(letter, cell);
+            }
             list.add(jsonRow);
 
         });

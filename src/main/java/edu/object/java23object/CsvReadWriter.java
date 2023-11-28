@@ -126,10 +126,8 @@ public class CsvReadWriter {
         lines.add(columns);
 
         //Add the rows
-        data.forEach(person -> {
-            String[] row = {person.getOrderDate(), person.getRegion(), person.getRep1(),
-            person.getRep2(), person.getItem(), person.getUnits(), person.getUnitCost(), person.getTotal()};
-            lines.add(row);
+        data.forEach(order -> {
+            lines.add(order.toCustomArray());
         });
 
         return writeAllLines(lines, path);

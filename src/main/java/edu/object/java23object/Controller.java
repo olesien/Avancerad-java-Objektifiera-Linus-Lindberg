@@ -24,6 +24,8 @@ public class Controller {
 
     Path currentPath = new File("").toPath(); //Make a dummy path
 
+    String[] columns = {"OrderDate", "Region", "Rep1", "Rep2", "Item", "Units", "UnitCost", "Total"};
+
     @FXML
     private Label welcomeText;
 
@@ -66,15 +68,14 @@ public class Controller {
     @FXML
     protected void onAddDataClick() {
         System.out.println("Adding data");
-        //data.add( new Order("Linus", "Lindberg", "linus-lindberg@outlook.com"));
+        data.add( new Order("2/6/2019", "West", "Test2", "Test3", "Pillow", "10", "100", "99.1"));
         tableView.getItems().setAll(getData());
         String pathString = currentPath.toString();
         try {
             if (pathString.contains(".csv")) {
-                String[] columns = {"OrderDate", "Region", "Rep1", "Rep2", "Item", "Units", "UnitCost", "Total"};
                 csvFileReader.saveCSV(currentPath, columns, data);
             } else if (pathString.contains(".json")) {
-                json.saveJSON(currentPath, data);
+                json.saveJSON(currentPath, columns, data);
             } else {
                 System.out.println("Can not save because file not found");
             }

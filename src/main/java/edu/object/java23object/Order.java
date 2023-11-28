@@ -2,6 +2,8 @@ package edu.object.java23object;
 
 import javafx.beans.property.SimpleStringProperty;
 
+import java.util.ArrayList;
+
 public class Order {
     private final SimpleStringProperty orderDate;
     private final SimpleStringProperty region;
@@ -53,6 +55,12 @@ public class Order {
 
     public String getTotal() {
         return total.get();
+    }
+
+    public String[] toCustomArray() {
+        String[] list = {orderDate.get(),region.get(), rep1.get(), rep2.get(), item.get(), units.get(), unitCost.get(), total.get() };
+
+        return list;
     }
 
 
