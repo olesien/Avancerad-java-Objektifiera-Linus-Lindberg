@@ -2,6 +2,7 @@ package edu.object.java23object;
 import javafx.fxml.FXML;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TextField;
+import javafx.stage.Stage;
 
 public class AddOrderController {
     Controller controller;
@@ -29,8 +30,11 @@ public class AddOrderController {
 
     @FXML
     private TextField total;
-    void init(Controller controller) {
+
+    Stage stage;
+    void init(Controller controller, Stage stage) {
         this.controller = controller;
+        this.stage = stage;
     }
 
     @FXML
@@ -55,5 +59,7 @@ public class AddOrderController {
         if (orderDate.length() > 0 && region.length() > 0 && rep1.length() > 0 && rep2.length() > 0 && item.length() > 0
                 && units.length() > 0 && unitCost.length() > 0 && total.length() > 0)
        controller.orderSubmit( new Order(orderDate, region, rep1, rep2, item, units, unitCost, total));
+        stage.close();
+
     }
 }

@@ -79,7 +79,7 @@ public class Controller {
             Scene scene = new Scene(parent, 620, 540); //Based on the loaded fxml, set the scene
             Stage stage = new Stage(); //Create the new window
             stage.setScene(scene);
-            controller.init(this); //Initialize the controller code, this is to load the things that are supposed to happen after start
+            controller.init(this, stage); //Initialize the controller code, this is to load the things that are supposed to happen after start
             stage.setTitle("Form");
             stage.show();
         } catch (IOException e) {
