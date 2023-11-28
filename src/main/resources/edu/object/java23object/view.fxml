@@ -12,8 +12,6 @@
     <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
   </padding>
 
-  <Label fx:id="welcomeText" />
-  <Button onAction="#onHelloButtonClick" text="Hi world" />
   <Button onAction="#onAddDataClick" text="Add data!" />
   <Button fx:id="setFileBtn" onAction="#onSetTile" text="Set JSON/CSV file!" />
    <TableView fx:id="tableView" prefHeight="400.0" prefWidth="225.0">
@@ -26,6 +24,7 @@
        <TableColumn fx:id="units" prefWidth="75.0" text="Units" />
        <TableColumn fx:id="unitCost" prefWidth="75.0" text="UnitCost" />
        <TableColumn fx:id="total" prefWidth="75.0" text="Total" />
+       <TableColumn fx:id="remove" prefWidth="75.0" text="Remove" />
      </columns>
    </TableView>
 </VBox>

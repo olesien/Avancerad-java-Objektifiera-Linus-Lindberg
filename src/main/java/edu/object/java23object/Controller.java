@@ -2,14 +2,15 @@ package edu.object.java23object;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javafx.util.Callback;
+
 import java.io.File;
 import java.nio.file.Path;
 import java.util.List;
@@ -25,9 +26,6 @@ public class Controller {
     Path currentPath = new File("").toPath(); //Make a dummy path
 
     String[] columns = {"OrderDate", "Region", "Rep1", "Rep2", "Item", "Units", "UnitCost", "Total"};
-
-    @FXML
-    private Label welcomeText;
 
     @FXML
     private TableView<Order> tableView;
@@ -57,31 +55,19 @@ public class Controller {
     private TableColumn<Order, String> total;
 
     @FXML
+    private TableColumn<Record, Boolean> remove;
+
+    @FXML
     private Button setFileBtn;
 
     Stage stage;
-    @FXML
-    protected void onHelloButtonClick() {
-        welcomeText.setText("Welcome to JavaFX Application!");
-    }
 
     @FXML
     protected void onAddDataClick() {
         System.out.println("Adding data");
         data.add( new Order("2/6/2019", "West", "Test2", "Test3", "Pillow", "10", "100", "99.1"));
-        tableView.getItems().setAll(getData());
-        String pathString = currentPath.toString();
-        try {
-            if (pathString.contains(".csv")) {
-                csvFileReader.saveCSV(currentPath, columns, data);
-            } else if (pathString.contains(".json")) {
-                json.saveJSON(currentPath, columns, data);
-            } else {
-                System.out.println("Can not save because file not found");
-            }
-        } catch (Exception err) {
-            System.out.println(err);
-        }
+        refresh();
+        save();
 
 
     }
@@ -118,9 +104,28 @@ public class Controller {
                 System.out.println("Invalid File");
             }
             this.currentPath = path;
-            tableView.getItems().setAll(getData()); //Refresh
+            refresh();
         }
 
+    }
+
+    public void refresh() {
+        tableView.getItems().setAll(getData()); //Refresh
+    }
+
+    public void save() {
+        String pathString = currentPath.toString();
+        try {
+            if (pathString.contains(".csv")) {
+                csvFileReader.saveCSV(currentPath, columns, data);
+            } else if (pathString.contains(".json")) {
+                json.saveJSON(currentPath, columns, data);
+            } else {
+                System.out.println("Can not save because file not found");
+            }
+        } catch (Exception err) {
+            System.out.println(err);
+        }
     }
 
     public void init () {
@@ -151,6 +156,16 @@ public class Controller {
                 new PropertyValueFactory<Order,String>("total")
         );
 
+        remove.setCellFactory(
+                new Callback<TableColumn<Record, Boolean>, TableCell<Record, Boolean>>() {
+
+                    @Override
+                    public TableCell<Record, Boolean> call(TableColumn<Record, Boolean> p) {
+                        return new ButtonCell();
+                    }
+
+                });
+
     }
 
     public void setStage(Stage stage) {
@@ -159,5 +174,38 @@ public class Controller {
 
     private List<Order> getData(){
         return data.stream().toList();
+    }
+
+    //Define the button cell. Solution credit: https://gist.github.com/abhinayagarwal/9735744 to delete row by cell
+    private class ButtonCell extends TableCell<Record, Boolean> {
+        final Button cellButton = new Button("Delete");
+
+        ButtonCell(){
+
+            //Action when the button is pressed
+            cellButton.setOnAction(new EventHandler<ActionEvent>(){
+
+                @Override
+                public void handle(ActionEvent t) {
+                    // get Selected Item
+                    System.out.println("Deleting");
+                    int selectdIndex = getTableRow().getIndex();
+                    Order currentOrder = (Order)tableView.getItems().get(selectdIndex);
+                    //remove selected item from the table list
+                    data.remove(currentOrder);
+                    refresh();
+                    save();
+                }
+            });
+        }
+
+        //Display button if the row is not empty
+        @Override
+        protected void updateItem(Boolean t, boolean empty) {
+            super.updateItem(t, empty);
+            if(!empty){
+                setGraphic(cellButton);
+            }
+        }
     }
 }
