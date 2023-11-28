@@ -17,23 +17,39 @@ import java.util.ResourceBundle;
 public class Controller implements Initializable {
     CsvReadWriter csvFileReader = new CsvReadWriter();
 
-    ObservableList<Person> data = FXCollections.observableArrayList(
+    ObservableList<Order> data = FXCollections.observableArrayList(
     );
 
     @FXML
     private Label welcomeText;
 
     @FXML
-    private TableView<Person> tableView;
+    private TableView<Order> tableView;
 
     @FXML
-    private TableColumn<Person, String> firstName;
+    private TableColumn<Order, String> orderDate;
 
     @FXML
-    private TableColumn<Person, String> lastName;
+    private TableColumn<Order, String> region;
 
     @FXML
-    private TableColumn<Person, String> email;
+    private TableColumn<Order, String> rep1;
+
+    @FXML
+    private TableColumn<Order, String> rep2;
+
+    @FXML
+    private TableColumn<Order, String> item;
+
+    @FXML
+    private TableColumn<Order, String> units;
+
+    @FXML
+    private TableColumn<Order, String> unitcost;
+
+    @FXML
+    private TableColumn<Order, String> total;
+
 
     @FXML
     protected void onHelloButtonClick() {
@@ -43,7 +59,7 @@ public class Controller implements Initializable {
     @FXML
     protected void onAddDataClick() {
         System.out.println("Adding data");
-        data.add( new Person("Linus", "Lindberg", "linus-lindberg@outlook.com"));
+        data.add( new Order("Linus", "Lindberg", "linus-lindberg@outlook.com"));
         tableView.getItems().setAll(getData());
         String[] columns = {"firstName", "lastName", "email"};
         try {
@@ -57,14 +73,14 @@ public class Controller implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        firstName.setCellValueFactory(
-                new PropertyValueFactory<Person,String>("firstName")
+        orderDate.setCellValueFactory(
+                new PropertyValueFactory<Order,String>("orderDate")
         );
-        lastName.setCellValueFactory(
-                new PropertyValueFactory<Person,String>("lastName")
+        region.setCellValueFactory(
+                new PropertyValueFactory<Order,String>("region")
         );
-        email.setCellValueFactory(
-                new PropertyValueFactory<Person,String>("email")
+        rep1.setCellValueFactory(
+                new PropertyValueFactory<Order,String>("rep1")
         );
 
 
@@ -78,7 +94,7 @@ public class Controller implements Initializable {
 
     }
 
-    private List<Person> getData(){
+    private List<Order> getData(){
         return data.stream().toList();
     }
 }

@@ -9,13 +9,12 @@ import java.io.Reader;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
 public class CsvReadWriter {
-    public ObservableList<Person> parseLines (List<String[]> lines) {
-        ObservableList<Person> newData = FXCollections.observableArrayList();
+    public ObservableList<Order> parseLines (List<String[]> lines) {
+        ObservableList<Order> newData = FXCollections.observableArrayList();
 
         int firstNameIndex = 0;
         int lastNameIndex = 1;
@@ -54,7 +53,7 @@ public class CsvReadWriter {
                         email = value;
                     }
                 }
-                newData.add(new Person(firstName, lastName, email));
+                newData.add(new Order(firstName, lastName, email));
             }
 
         }
@@ -86,7 +85,7 @@ public class CsvReadWriter {
         return readAllLines(path);
     }
 
-    public List<String[]>  saveCSV(String[] columns, ObservableList<Person> data) throws Exception {
+    public List<String[]>  saveCSV(String[] columns, ObservableList<Order> data) throws Exception {
         List<String[]> lines = new ArrayList<>();
         lines.add(columns);
 

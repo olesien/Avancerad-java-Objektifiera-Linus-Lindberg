@@ -7,7 +7,7 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox alignment="CENTER" spacing="20.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.object.java23object.Controller">
+<VBox alignment="CENTER" spacing="20.0" xmlns="http://javafx.com/javafx/20" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.object.java23object.Controller">
   <padding>
     <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
   </padding>
@@ -17,9 +17,14 @@
   <Button onAction="#onAddDataClick" text="Add data!" />
    <TableView fx:id="tableView" prefHeight="400.0" prefWidth="225.0">
      <columns>
-       <TableColumn fx:id="firstName" prefWidth="75.0" text="First Name" />
-       <TableColumn fx:id="lastName" prefWidth="75.0" text="Last Name" />
-       <TableColumn fx:id="email" prefWidth="75.0" text="Email" />
+       <TableColumn fx:id="orderDate" prefWidth="75.0" text="OrderDate" />
+       <TableColumn fx:id="region" prefWidth="75.0" text="Region" />
+       <TableColumn fx:id="rep1" prefWidth="75.0" text="Rep1" />
+       <TableColumn fx:id="rep2" prefWidth="75.0" text="Rep2" />
+       <TableColumn fx:id="item" prefWidth="75.0" text="Item" />
+       <TableColumn fx:id="units" prefWidth="75.0" text="Units" />
+       <TableColumn fx:id="unitcost" prefWidth="75.0" text="UnitCost" />
+       <TableColumn fx:id="total" prefWidth="75.0" text="Total" />
      </columns>
    </TableView>
 </VBox>
