@@ -19,7 +19,7 @@ public class Main extends Application {
         Scene scene = new Scene(parent, 320, 240); //Based on the loaded fxml, set the scene
         stage.setScene(scene);
         controller.init(); //Initialize the controller code, this is to load the things that are supposed to happen after start
-
+        stage.setTitle("Order Overview");
         stage.show();
 
     }

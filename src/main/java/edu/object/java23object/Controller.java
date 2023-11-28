@@ -5,6 +5,9 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.FileChooser;
@@ -12,6 +15,7 @@ import javafx.stage.Stage;
 import javafx.util.Callback;
 
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
 
@@ -64,14 +68,30 @@ public class Controller {
 
     @FXML
     protected void onAddDataClick() {
-        System.out.println("Adding data");
-        data.add( new Order("2/6/2019", "West", "Test2", "Test3", "Pillow", "10", "100", "99.1"));
-        refresh();
-        save();
+        try {
+            //Make a new screen!
 
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource("addorder.fxml"));
+            Parent parent = loader.load();//Load the fxml
 
+            AddOrderController controller = loader.getController(); //Get controller ref before scene is made
+            Scene scene = new Scene(parent, 620, 540); //Based on the loaded fxml, set the scene
+            Stage stage = new Stage(); //Create the new window
+            stage.setScene(scene);
+            controller.init(this); //Initialize the controller code, this is to load the things that are supposed to happen after start
+            stage.setTitle("Form");
+            stage.show();
+        } catch (IOException e) {
+            System.out.println("Something went REALLy wrong");
+        }
     }
 
+    public void orderSubmit(Order newOrder) {
+        data.add(newOrder);
+        refresh();
+        save();
+    }
     @FXML
     protected void onSetTile() {
         //init file chooser
