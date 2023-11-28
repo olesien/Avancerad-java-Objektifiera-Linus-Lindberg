@@ -45,7 +45,7 @@ public class Controller implements Initializable {
     private TableColumn<Order, String> units;
 
     @FXML
-    private TableColumn<Order, String> unitcost;
+    private TableColumn<Order, String> unitCost;
 
     @FXML
     private TableColumn<Order, String> total;
@@ -81,6 +81,23 @@ public class Controller implements Initializable {
         );
         rep1.setCellValueFactory(
                 new PropertyValueFactory<Order,String>("rep1")
+        );
+
+        rep2.setCellValueFactory(
+                new PropertyValueFactory<Order,String>("rep2")
+        );
+        item.setCellValueFactory(
+                new PropertyValueFactory<Order,String>("item")
+        );
+        units.setCellValueFactory(
+                new PropertyValueFactory<Order,String>("units")
+        );
+
+        unitCost.setCellValueFactory(
+                new PropertyValueFactory<Order,String>("unitCost")
+        );
+        total.setCellValueFactory(
+                new PropertyValueFactory<Order,String>("total")
         );
 
 

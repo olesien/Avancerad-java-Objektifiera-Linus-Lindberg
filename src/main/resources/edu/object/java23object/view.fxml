@@ -23,7 +23,7 @@
        <TableColumn fx:id="rep2" prefWidth="75.0" text="Rep2" />
        <TableColumn fx:id="item" prefWidth="75.0" text="Item" />
        <TableColumn fx:id="units" prefWidth="75.0" text="Units" />
-       <TableColumn fx:id="unitcost" prefWidth="75.0" text="UnitCost" />
+       <TableColumn fx:id="unitCost" prefWidth="75.0" text="UnitCost" />
        <TableColumn fx:id="total" prefWidth="75.0" text="Total" />
      </columns>
    </TableView>

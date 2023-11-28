@@ -33,8 +33,13 @@ public class JsonReadWrite {
                     String orderDate = arr.getJSONObject(i).getString("A");
                     String region = arr.getJSONObject(i).getString("B");
                     String rep1 = arr.getJSONObject(i).getString("C");
+                    String rep2 = arr.getJSONObject(i).getString("D");
+                    String item = arr.getJSONObject(i).getString("E");
+                    String units = arr.getJSONObject(i).getString("F");
+                    String unitCost = arr.getJSONObject(i).getString("G");
+                    String total = arr.getJSONObject(i).getString("H");
 
-                    newData.add(new Order(orderDate, region, rep1));
+                    newData.add(new Order(orderDate, region, rep1, rep2, item, units, unitCost, total));
                 }
 
 

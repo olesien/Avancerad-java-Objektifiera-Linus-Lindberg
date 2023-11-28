@@ -19,11 +19,11 @@ public class CsvReadWriter {
         int orderDateIndex = 0;
         int regionIndex = 1;
         int rep1index = 2;
-        int rep2index = 0;
-        int itemIndex = 1;
-        int unitsIndex = 2;
-        int unitCostIndex = 0;
-        int totalIndex = 1;
+        int rep2index = 3;
+        int itemIndex = 4;
+        int unitsIndex = 5;
+        int unitCostIndex = 6;
+        int totalIndex = 7;
         for (int rowI = 0; rowI < lines.size(); rowI++) {
             String[] line = lines.get(rowI);
             if (rowI == 0) {
@@ -83,7 +83,7 @@ public class CsvReadWriter {
                         units = value;
                     }
                     if (unitCostIndex == colI) {
-                        units = value;
+                        unitCost = value;
                     }
                     if (totalIndex == colI) {
                         total = value;
