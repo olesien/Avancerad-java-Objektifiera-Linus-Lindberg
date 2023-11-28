@@ -93,7 +93,7 @@ public class Controller implements Initializable {
         tableView.getItems().setAll(getData());
 
         JsonReadWrite json = new JsonReadWrite();
-        json.read();
+        System.out.println(json.read());
 
     }
 

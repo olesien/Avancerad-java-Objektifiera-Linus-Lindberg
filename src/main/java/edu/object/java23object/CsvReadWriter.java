@@ -16,9 +16,9 @@ public class CsvReadWriter {
     public ObservableList<Order> parseLines (List<String[]> lines) {
         ObservableList<Order> newData = FXCollections.observableArrayList();
 
-        int firstNameIndex = 0;
-        int lastNameIndex = 1;
-        int emailIndex = 1;
+        int orderDateIndex = 0;
+        int regionIndex = 1;
+        int rep1index = 2;
         for (int rowI = 0; rowI < lines.size(); rowI++) {
             String[] line = lines.get(rowI);
             if (rowI == 0) {
@@ -27,33 +27,33 @@ public class CsvReadWriter {
                 for (int colI = 0; colI < line.length; colI++) {
                     String value = line[colI];
                     switch (value) {
-                        case "FirstName":
-                            firstNameIndex = colI;
-                        case "LastName":
-                            lastNameIndex = colI;
-                        case "Email":
-                            emailIndex = colI;
+                        case "OrderDate":
+                            orderDateIndex = colI;
+                        case "Region":
+                            regionIndex = colI;
+                        case "Rep1":
+                            rep1index = colI;
                     }
                 }
             } else {
                 //Map rows
-                String firstName = "";
-                String lastName = "";
-                String email = "";
+                String orderDate = "";
+                String region = "";
+                String rep1 = "";
 
                 for (int colI = 0; colI < line.length; colI++) {
                     String value = line[colI];
-                    if (firstNameIndex == colI) {
-                        firstName = value;
+                    if (orderDateIndex == colI) {
+                        orderDate = value;
                     }
-                    if (lastNameIndex == colI) {
-                        lastName = value;
+                    if (regionIndex == colI) {
+                        region = value;
                     }
-                    if (emailIndex == colI) {
-                        email = value;
+                    if (rep1index == colI) {
+                        rep1 = value;
                     }
                 }
-                newData.add(new Order(firstName, lastName, email));
+                newData.add(new Order(orderDate, region, rep1));
             }
 
         }

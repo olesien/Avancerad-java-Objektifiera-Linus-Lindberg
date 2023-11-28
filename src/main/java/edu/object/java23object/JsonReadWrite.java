@@ -5,43 +5,41 @@ import java.util.ArrayList;
 
 import java.util.Scanner;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import org.json.*;
 
 public class JsonReadWrite {
 
-    void read () {
-        ArrayList<String> aryL = new ArrayList<>();
-        String[][] array2d = new String[3][11];
+    ObservableList<Order> read () {
+        ObservableList<Order> newData = FXCollections.observableArrayList();
         try {
-            File f = new File("src/Materialllista.json");
+            File f = new File("src/data.json");
             Scanner sc = new Scanner(f);
-            String page = "";
+            String jsonString = "";
             while (sc.hasNext()) {
                 String line = sc.nextLine();
-                String[] array = line.split(",", 3);
-                //aryL.addAll(Arrays.asList(array));
-                //System.out.println(array[0]);
-                //System.out.println(Arrays.deepToString(array));
-                //System.out.println(line);
-
-                page += line;
+                jsonString += line;
             }
-            System.out.println(page);
-            String[] split = page.split("}");
-
-            for (int i = 0; i < split.length; i++) {
-                String line = split[i];
-                String[] cols = line.split(",");
-                System.out.println(cols[0] + "\n");
-                System.out.println(cols[1] + "\n");
-                System.out.println(cols[2] + "\n");
-
-                System.out.println(line + "\n");
-            }
-
-
-
             sc.close();
+            System.out.println(jsonString);
+
+
+            JSONArray arr = new JSONArray(jsonString);
+            //String[] cols = {"A", "B", "C", "D", "E", "F", "G", "H"};
+            for (int i = 0; i < arr.length(); i++)
+            {
+                if (i != 0) { //Skip the first one as that is just the col heads
+                    String orderDate = arr.getJSONObject(i).getString("A");
+                    String region = arr.getJSONObject(i).getString("B");
+                    String rep1 = arr.getJSONObject(i).getString("C");
+
+                    newData.add(new Order(orderDate, region, rep1));
+                }
+
+
+            }
+
 
          /*   for (String s : aryL) {
                 System.out.println(s);
@@ -50,5 +48,6 @@ public class JsonReadWrite {
         } catch (Exception e) {
             System.out.println("ERROR" + e.toString());
         }
+        return newData;
     }
 }
