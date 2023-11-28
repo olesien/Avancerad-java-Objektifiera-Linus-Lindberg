@@ -16,10 +16,10 @@ import org.json.*;
 
 public class JsonReadWrite {
 
-    ObservableList<Order> read () {
+    ObservableList<Order> read (Path path) {
         ObservableList<Order> newData = FXCollections.observableArrayList();
         try {
-            File f = new File("src/data.json");
+            File f = path.toFile();
             Scanner sc = new Scanner(f);
             String jsonString = "";
             while (sc.hasNext()) {
@@ -61,7 +61,7 @@ public class JsonReadWrite {
         return newData;
     }
 
-    void saveJSON(ObservableList<Order> data) {
+    void saveJSON(Path path, ObservableList<Order> data) {
         List<JSONObject> list = new ArrayList<>();
         //Column Head
         JSONObject jOb = new JSONObject();
@@ -91,7 +91,6 @@ public class JsonReadWrite {
         });
 
         JSONArray ja = new JSONArray(list);
-        Path path = FileSystems.getDefault().getPath("src", "data.json");
 
         try (PrintWriter out = new PrintWriter(new FileWriter(path.toFile()))) {
             out.write(ja.toString());

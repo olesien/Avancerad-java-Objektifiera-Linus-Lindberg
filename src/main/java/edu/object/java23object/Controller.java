@@ -3,23 +3,26 @@ package edu.object.java23object;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
-
-import java.net.URL;
-import java.nio.file.FileSystems;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
+import java.io.File;
+import java.nio.file.Path;
 import java.util.List;
-import java.util.ResourceBundle;
 
-public class Controller implements Initializable {
+public class Controller {
+
     CsvReadWriter csvFileReader = new CsvReadWriter();
     JsonReadWrite json = new JsonReadWrite();
 
     ObservableList<Order> data = FXCollections.observableArrayList(
     );
+
+    Path currentPath = new File("").toPath(); //Make a dummy path
 
     @FXML
     private Label welcomeText;
@@ -51,7 +54,10 @@ public class Controller implements Initializable {
     @FXML
     private TableColumn<Order, String> total;
 
+    @FXML
+    private Button setFileBtn;
 
+    Stage stage;
     @FXML
     protected void onHelloButtonClick() {
         welcomeText.setText("Welcome to JavaFX Application!");
@@ -62,10 +68,16 @@ public class Controller implements Initializable {
         System.out.println("Adding data");
         //data.add( new Order("Linus", "Lindberg", "linus-lindberg@outlook.com"));
         tableView.getItems().setAll(getData());
-        String[] columns = {"OrderDate", "Region", "Rep1", "Rep2", "Item", "Units", "UnitCost", "Total"};
+        String pathString = currentPath.toString();
         try {
-            csvFileReader.saveCSV(columns, data);
-            json.saveJSON(data);
+            if (pathString.contains(".csv")) {
+                String[] columns = {"OrderDate", "Region", "Rep1", "Rep2", "Item", "Units", "UnitCost", "Total"};
+                csvFileReader.saveCSV(currentPath, columns, data);
+            } else if (pathString.contains(".json")) {
+                json.saveJSON(currentPath, data);
+            } else {
+                System.out.println("Can not save because file not found");
+            }
         } catch (Exception err) {
             System.out.println(err);
         }
@@ -73,8 +85,44 @@ public class Controller implements Initializable {
 
     }
 
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
+    @FXML
+    protected void onSetTile() {
+        //init file chooser
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setInitialDirectory(new File("src"));
+        FileChooser.ExtensionFilter csvF = new FileChooser.ExtensionFilter("CSV files (*.csv)", "*.csv");
+        FileChooser.ExtensionFilter jsonF = new FileChooser.ExtensionFilter("JSON files (*.json)", "*.json");
+        fileChooser.getExtensionFilters().addAll(csvF, jsonF);
+        fileChooser.setTitle("Open CSV/JSON file");
+        File file = fileChooser.showOpenDialog(stage.getScene().getWindow());
+        if (file != null) {
+            //Handle file add event
+
+            setFileBtn.setText(file.getPath());
+            Path path = file.toPath();
+            String fileName = file.getPath();
+            if (fileName.contains(".csv")) {
+                System.out.println("We have a CSV file");
+                // we have a csv
+                try {
+                    data = csvFileReader.parseLines(csvFileReader.readAllLines(path));
+                } catch (Exception err) {
+                    System.out.println(err);
+                }
+            } else if (fileName.contains(".json")) {
+                System.out.println("We have a JSON file");
+                data = json.read(path);
+                //We have a json
+            } else {
+                System.out.println("Invalid File");
+            }
+            this.currentPath = path;
+            tableView.getItems().setAll(getData()); //Refresh
+        }
+
+    }
+
+    public void init () {
         orderDate.setCellValueFactory(
                 new PropertyValueFactory<Order,String>("orderDate")
         );
@@ -102,18 +150,10 @@ public class Controller implements Initializable {
                 new PropertyValueFactory<Order,String>("total")
         );
 
+    }
 
-        //Get data
-        try {
-            data = csvFileReader.parseLines(csvFileReader.readAllLines(FileSystems.getDefault().getPath("src", "data.csv")));
-        } catch (Exception err) {
-            System.out.println(err);
-        }
-        tableView.getItems().setAll(getData());
-
-
-        System.out.println(json.read());
-
+    public void setStage(Stage stage) {
+        this.stage = stage;
     }
 
     private List<Order> getData(){

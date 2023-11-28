@@ -15,6 +15,7 @@
   <Label fx:id="welcomeText" />
   <Button onAction="#onHelloButtonClick" text="Hi world" />
   <Button onAction="#onAddDataClick" text="Add data!" />
+  <Button fx:id="setFileBtn" onAction="#onSetTile" text="Set JSON/CSV file!" />
    <TableView fx:id="tableView" prefHeight="400.0" prefWidth="225.0">
      <columns>
        <TableColumn fx:id="orderDate" prefWidth="75.0" text="OrderDate" />

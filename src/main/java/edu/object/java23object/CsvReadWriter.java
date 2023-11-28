@@ -121,7 +121,7 @@ public class CsvReadWriter {
         return readAllLines(path);
     }
 
-    public List<String[]>  saveCSV(String[] columns, ObservableList<Order> data) throws Exception {
+    public List<String[]>  saveCSV(Path path, String[] columns, ObservableList<Order> data) throws Exception {
         List<String[]> lines = new ArrayList<>();
         lines.add(columns);
 
@@ -132,7 +132,6 @@ public class CsvReadWriter {
             lines.add(row);
         });
 
-        Path path = FileSystems.getDefault().getPath("src", "data.csv");
         return writeAllLines(lines, path);
     }
 }
