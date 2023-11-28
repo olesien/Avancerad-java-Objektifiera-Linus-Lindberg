@@ -91,7 +91,7 @@ public class CsvReadWriter {
 
         //Add the rows
         data.forEach(person -> {
-            String[] row = {person.getFirstName(), person.getLastName(), person.getEmail()};
+            String[] row = {person.getOrderDate(), person.getRegion(), person.getRep1()};
             lines.add(row);
         });
 

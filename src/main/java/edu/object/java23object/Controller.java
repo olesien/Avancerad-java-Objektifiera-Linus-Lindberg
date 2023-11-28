@@ -92,6 +92,9 @@ public class Controller implements Initializable {
         }
         tableView.getItems().setAll(getData());
 
+        JsonReadWrite json = new JsonReadWrite();
+        json.read();
+
     }
 
     private List<Order> getData(){
