@@ -66,7 +66,7 @@ public class Controller {
         save();
     }
     @FXML
-    protected void onSetTile() {
+    protected void onSetTile() { //This is triggered when we click to choose a file
         //init file chooser
         FileChooser fileChooser = new FileChooser();
         fileChooser.setInitialDirectory(new File("src"));
@@ -78,7 +78,8 @@ public class Controller {
         if (file != null) {
             //Handle file add event
 
-            setFileBtn.setText(file.getPath());
+            setFileBtn.setText(file.getName());
+            stage.setTitle("Inspecting " + file.getName());
             Path path = file.toPath();
             String fileName = file.getPath();
             if (fileName.contains(".csv")) {
@@ -96,8 +97,8 @@ public class Controller {
             } else {
                 System.out.println("Invalid File");
             }
-            this.currentPath = path;
-            addDataBtn.setDisable(false);
+            this.currentPath = path; //Set current path
+            addDataBtn.setDisable(false); //Since we have data we can enable this
             refresh();
         }
 
@@ -114,12 +115,12 @@ public class Controller {
                         new SimpleStringProperty(param.getValue().get(j).toString()));
                 tableView.getColumns().add(newCol);
             }
-
-        //Add remove one
-        TableColumn remove = new TableColumn("Remove");
-        remove.setCellFactory(
-                (Callback<TableColumn<Record, Boolean>, TableCell<Record, Boolean>>) p -> new ButtonCell());
-        tableView.getColumns().add(remove);
+            if (data.getColumns().size() > 0 && data.getRows().size() > 0) { //If it is now empty we can remove
+                TableColumn remove = new TableColumn("Remove");
+                remove.setCellFactory(
+                        (Callback<TableColumn<Record, Boolean>, TableCell<Record, Boolean>>) p -> new ButtonCell());
+                tableView.getColumns().add(remove);
+            }
 
         //Dynamic Array
         ObservableList<ObservableList> rowData = FXCollections.observableArrayList();

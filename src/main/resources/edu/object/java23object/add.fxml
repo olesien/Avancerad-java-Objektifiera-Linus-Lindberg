@@ -31,6 +31,6 @@
             </VBox>
          </center>
       </BorderPane>
-      <Text layoutX="43.0" layoutY="42.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Order Form" textAlignment="CENTER" wrappingWidth="532.0" />
+      <Text layoutX="43.0" layoutY="42.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Form" textAlignment="CENTER" wrappingWidth="532.0" />
    </children>
 </AnchorPane>
