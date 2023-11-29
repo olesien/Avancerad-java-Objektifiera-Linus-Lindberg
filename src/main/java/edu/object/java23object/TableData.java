@@ -25,14 +25,6 @@ public class TableData {
         columns.add(col);
     }
 
-    public void clearRows() {
-        rows.clear();
-    }
-
-    public void clearCols() {
-        columns.clear();
-    }
-
     public void removeByRow(ObservableList row) {
         rows.remove(row);
     }

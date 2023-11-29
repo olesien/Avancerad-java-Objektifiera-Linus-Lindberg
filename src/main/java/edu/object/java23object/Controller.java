@@ -31,12 +31,11 @@ public class Controller {
     @FXML
     private TableView<ObservableList> tableView;
 
-
-    @FXML
-    private TableColumn<ObservableList, Boolean> remove;
-
     @FXML
     private Button setFileBtn;
+
+    @FXML
+    private Button addDataBtn;
 
     Stage stage;
 
@@ -98,6 +97,7 @@ public class Controller {
                 System.out.println("Invalid File");
             }
             this.currentPath = path;
+            addDataBtn.setDisable(false);
             refresh();
         }
 

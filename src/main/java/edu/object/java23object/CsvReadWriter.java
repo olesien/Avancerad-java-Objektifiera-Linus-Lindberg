@@ -53,6 +53,7 @@ public class CsvReadWriter {
         }
     }
 
+    //Write each line to the CSV
     public List<String[]> writeAllLines(List<String[]> lines, Path path) throws Exception {
         try (CSVWriter writer = new CSVWriter(new FileWriter(path.toString()))) {
             writer.writeAll(lines);
@@ -60,6 +61,7 @@ public class CsvReadWriter {
         return readAllLines(path);
     }
 
+    //Convert the CSV to a readable format, then pass on to writeAllLines above
     public void  saveCSV(Path path, TableData data) throws Exception {
         List<String[]> lines = new ArrayList<>();
         ArrayList columns = data.getColumns();
