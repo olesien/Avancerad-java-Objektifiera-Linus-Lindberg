@@ -3,10 +3,10 @@ package edu.object.java23object;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.PrintWriter;
-import java.nio.file.FileSystems;
 import java.nio.file.Path;
 import java.util.ArrayList;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.Scanner;
 
@@ -16,8 +16,9 @@ import org.json.*;
 
 public class JsonReadWrite {
     private String[] alphabet = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q"}; //That'll do
-    ObservableList<Order> read (Path path) {
-        ObservableList<Order> newData = FXCollections.observableArrayList();
+    TableData read (Path path) {
+        TableData tableData = new TableData();
+
         try {
             File f = path.toFile();
             Scanner sc = new Scanner(f);
@@ -33,53 +34,54 @@ public class JsonReadWrite {
             JSONArray arr = new JSONArray(jsonString);
             for (int i = 0; i < arr.length(); i++)
             {
-                if (i != 0) { //Skip the first one as that is just the col heads
-                    String orderDate = arr.getJSONObject(i).getString("A");
-                    String region = arr.getJSONObject(i).getString("B");
-                    String rep1 = arr.getJSONObject(i).getString("C");
-                    String rep2 = arr.getJSONObject(i).getString("D");
-                    String item = arr.getJSONObject(i).getString("E");
-                    String units = arr.getJSONObject(i).getString("F");
-                    String unitCost = arr.getJSONObject(i).getString("G");
-                    String total = arr.getJSONObject(i).getString("H");
+                JSONObject object = arr.getJSONObject(i);
+                if (i == 0) {
+                    Iterator<String> keys = object.keys();
+                    while(keys.hasNext()) {
+                        String key = keys.next();
+                        tableData.addCol((String) object.get(key));
+                    }
 
-                    newData.add(new Order(orderDate, region, rep1, rep2, item, units, unitCost, total));
+                } else {
+                    ObservableList<String> row = FXCollections.observableArrayList();
+                    Iterator<String> keys = object.keys();
+                    while(keys.hasNext()) {
+                        String key = keys.next();
+                        row.add((String) object.get(key));
+
+                    }
+                    tableData.addRow(row);
                 }
-
-
             }
-
-
-         /*   for (String s : aryL) {
-                System.out.println(s);
-            }
-*/
         } catch (Exception e) {
             System.out.println("ERROR" + e.toString());
         }
-        return newData;
+        return tableData;
     }
 
-    void saveJSON(Path path, String[] columns, ObservableList<Order> data) {
+    void saveJSON(Path path, TableData data) {
         List<JSONObject> list = new ArrayList<>();
+
+        ArrayList columns = data.getColumns();
+        ArrayList<ObservableList<String>> rows = data.getRows();
+
         //Column Head
         JSONObject jOb = new JSONObject();
-        for (int i = 0; i < columns.length; i++) { //To make it easier to scale later
+        for (int i = 0; i < columns.size(); i++) { //To make it easier to scale later
             String letter = alphabet[i];
-            String column = columns[i];
+            String column = (String) columns.get(i);
             jOb.put(letter, column);
         }
         list.add(jOb);
 
 
         //The rows below
-        data.forEach(row -> {
+        rows.forEach(row -> {
 
             JSONObject jsonRow = new JSONObject();
-            String[] orderArray = row.toCustomArray();
-            for (int i = 0; i < orderArray.length; i++) {
+            for (int i = 0; i < row.size(); i++) {
                 String letter = alphabet[i];
-                String cell = orderArray[i];
+                String cell = row.get(i);
                 jsonRow.put(letter, cell);
             }
             list.add(jsonRow);

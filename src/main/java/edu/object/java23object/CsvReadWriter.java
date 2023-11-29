@@ -10,20 +10,13 @@ import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class CsvReadWriter {
-    public ObservableList<Order> parseLines (List<String[]> lines) {
-        ObservableList<Order> newData = FXCollections.observableArrayList();
+    public TableData parseLines (List<String[]> lines) {
+        TableData tableData = new TableData();
 
-        int orderDateIndex = 0;
-        int regionIndex = 1;
-        int rep1index = 2;
-        int rep2index = 3;
-        int itemIndex = 4;
-        int unitsIndex = 5;
-        int unitCostIndex = 6;
-        int totalIndex = 7;
         for (int rowI = 0; rowI < lines.size(); rowI++) {
             String[] line = lines.get(rowI);
             if (rowI == 0) {
@@ -31,69 +24,15 @@ public class CsvReadWriter {
                 //Get columns and map them with their indexes.
                 for (int colI = 0; colI < line.length; colI++) {
                     String value = line[colI];
-                    switch (value) {
-                        case "OrderDate":
-                            orderDateIndex = colI;
-                        case "Region":
-                            regionIndex = colI;
-                        case "Rep1":
-                            rep1index = colI;
-                        case "Rep2":
-                            rep2index = colI;
-                        case "Item":
-                            itemIndex = colI;
-                        case "Units":
-                            unitsIndex = colI;
-                        case "UnitCost":
-                            unitCostIndex = colI;
-                        case "Total":
-                            totalIndex = colI;
-                    }
+                    tableData.addCol(value);
                 }
             } else {
                 //Map rows
-                String orderDate = "";
-                String region = "";
-                String rep1 = "";
-                String rep2 = "";
-                String item = "";
-                String units = "";
-                String unitCost = "";
-                String total = "";
-
-                for (int colI = 0; colI < line.length; colI++) {
-                    String value = line[colI];
-                    if (orderDateIndex == colI) {
-                        orderDate = value;
-                    }
-                    if (regionIndex == colI) {
-                        region = value;
-                    }
-                    if (rep1index == colI) {
-                        rep1 = value;
-                    }
-
-                    if (rep2index == colI) {
-                        rep2 = value;
-                    }
-                    if (itemIndex == colI) {
-                        item = value;
-                    }
-                    if (unitsIndex == colI) {
-                        units = value;
-                    }
-                    if (unitCostIndex == colI) {
-                        unitCost = value;
-                    }
-                    if (totalIndex == colI) {
-                        total = value;
-                    }
-                }
-                newData.add(new Order(orderDate, region, rep1, rep2, item, units, unitCost, total));
+                tableData.addRow(FXCollections.observableArrayList(line));
             }
 
         }
-        return newData;
+        return tableData;
     }
 
     public List<String[]> readAllLines(Path filePath) throws Exception {
@@ -121,15 +60,17 @@ public class CsvReadWriter {
         return readAllLines(path);
     }
 
-    public List<String[]>  saveCSV(Path path, String[] columns, ObservableList<Order> data) throws Exception {
+    public void  saveCSV(Path path, TableData data) throws Exception {
         List<String[]> lines = new ArrayList<>();
-        lines.add(columns);
+        ArrayList columns = data.getColumns();
+        lines.add((String[]) columns.toArray(new String[columns.size()]));
 
         //Add the rows
-        data.forEach(order -> {
-            lines.add(order.toCustomArray());
+        ArrayList<ObservableList<String>> rows = data.getRows();
+        rows.forEach(row -> {
+            lines.add(row.toArray(new String[columns.size()]));
         });
 
-        return writeAllLines(lines, path);
+        writeAllLines(lines, path);
     }
 }
