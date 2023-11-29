@@ -17,6 +17,7 @@ import javafx.util.Callback;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Controller {
@@ -34,29 +35,7 @@ public class Controller {
     @FXML
     private TableView<Order> tableView;
 
-    @FXML
-    private TableColumn<Order, String> orderDate;
-
-    @FXML
-    private TableColumn<Order, String> region;
-
-    @FXML
-    private TableColumn<Order, String> rep1;
-
-    @FXML
-    private TableColumn<Order, String> rep2;
-
-    @FXML
-    private TableColumn<Order, String> item;
-
-    @FXML
-    private TableColumn<Order, String> units;
-
-    @FXML
-    private TableColumn<Order, String> unitCost;
-
-    @FXML
-    private TableColumn<Order, String> total;
+    private ArrayList<TableColumn<Record, Boolean>> cols = new ArrayList<TableColumn<Record, Boolean>>();
 
     @FXML
     private TableColumn<Record, Boolean> remove;
@@ -130,6 +109,27 @@ public class Controller {
     }
 
     public void refresh() {
+        tableView.getColumns().removeAll();
+        for (String column : columns) {
+            TableColumn newCol = new TableColumn(column);
+            newCol.setCellValueFactory(
+                    new PropertyValueFactory<Record,String>(column)
+            );
+            tableView.getColumns().add(newCol);
+        }
+        //Add remove one
+        TableColumn remove = new TableColumn("Remove");
+        remove.setCellFactory(
+                new Callback<TableColumn<Record, Boolean>, TableCell<Record, Boolean>>() {
+
+                    @Override
+                    public TableCell<Record, Boolean> call(TableColumn<Record, Boolean> p) {
+                        return new ButtonCell();
+                    }
+
+                });
+        tableView.getColumns().add(remove);
+
         tableView.getItems().setAll(getData()); //Refresh
     }
 
@@ -149,42 +149,7 @@ public class Controller {
     }
 
     public void init () {
-        orderDate.setCellValueFactory(
-                new PropertyValueFactory<Order,String>("orderDate")
-        );
-        region.setCellValueFactory(
-                new PropertyValueFactory<Order,String>("region")
-        );
-        rep1.setCellValueFactory(
-                new PropertyValueFactory<Order,String>("rep1")
-        );
-
-        rep2.setCellValueFactory(
-                new PropertyValueFactory<Order,String>("rep2")
-        );
-        item.setCellValueFactory(
-                new PropertyValueFactory<Order,String>("item")
-        );
-        units.setCellValueFactory(
-                new PropertyValueFactory<Order,String>("units")
-        );
-
-        unitCost.setCellValueFactory(
-                new PropertyValueFactory<Order,String>("unitCost")
-        );
-        total.setCellValueFactory(
-                new PropertyValueFactory<Order,String>("total")
-        );
-
-        remove.setCellFactory(
-                new Callback<TableColumn<Record, Boolean>, TableCell<Record, Boolean>>() {
-
-                    @Override
-                    public TableCell<Record, Boolean> call(TableColumn<Record, Boolean> p) {
-                        return new ButtonCell();
-                    }
-
-                });
+        refresh();
 
     }
 

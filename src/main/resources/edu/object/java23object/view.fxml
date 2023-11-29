@@ -22,15 +22,6 @@
    </BorderPane>
    <TableView fx:id="tableView" prefHeight="400.0" prefWidth="225.0">
      <columns>
-       <TableColumn fx:id="orderDate" prefWidth="75.0" text="OrderDate" />
-       <TableColumn fx:id="region" prefWidth="75.0" text="Region" />
-       <TableColumn fx:id="rep1" prefWidth="75.0" text="Rep1" />
-       <TableColumn fx:id="rep2" prefWidth="75.0" text="Rep2" />
-       <TableColumn fx:id="item" prefWidth="75.0" text="Item" />
-       <TableColumn fx:id="units" prefWidth="75.0" text="Units" />
-       <TableColumn fx:id="unitCost" prefWidth="75.0" text="UnitCost" />
-       <TableColumn fx:id="total" prefWidth="75.0" text="Total" />
-       <TableColumn fx:id="remove" prefWidth="75.0" text="Remove" />
      </columns>
    </TableView>
 </VBox>
