@@ -125,13 +125,13 @@ public class Controller {
         tableView.getItems().clear();
         ArrayList<String> cols = data.getColumns();
             for(int i=0 ; i< cols.size(); i++) {
-                final int j = i;
+                final int j = i; //So that we can reuse
                 TableColumn newCol = new TableColumn(cols.get(i));
                 newCol.setCellValueFactory((Callback<TableColumn.CellDataFeatures<ObservableList, String>, ObservableValue<String>>) param ->
                         new SimpleStringProperty(param.getValue().get(j).toString()));
                 tableView.getColumns().add(newCol);
             }
-            if (data.getColumns().size() > 0 && data.getRows().size() > 0) { //If it is now empty we can remove
+            if (!data.getColumns().isEmpty() && !data.getRows().isEmpty()) { //If it is now empty we can remove
                 TableColumn remove = new TableColumn("Remove");
                 remove.setCellFactory(
                         (Callback<TableColumn<Record, Boolean>, TableCell<Record, Boolean>>) p -> new ButtonCell());
