@@ -29,7 +29,7 @@ public class Controller {
     Path currentPath = new File("").toPath(); //Make a dummy path
 
     @FXML
-    private TableView<ObservableList> tableView;
+    private TableView<ObservableList<?>> tableView;
 
     @FXML
     private Button setFileBtn;
@@ -39,6 +39,7 @@ public class Controller {
 
     Stage stage;
 
+    //This is triggered when add data button is clicked, and will lead to a new screen
     @FXML
     protected void onAddDataClick() {
         try {
@@ -60,6 +61,7 @@ public class Controller {
         }
     }
 
+    //Triggered when new data is submitted from other scene.
     public void submitForm(ObservableList<String> formData) {
         data.addRow(formData);
         refresh();
@@ -104,18 +106,22 @@ public class Controller {
 
     }
 
+    //Triggered whenever something new happens, clears table and adds all data again.
     public void refresh() {
+        //Clear columns and rows
         tableView.getColumns().clear();
         tableView.getItems().clear();
+
+        //Iterate over columns from tableData class, and add them to table
         ArrayList<String> cols = data.getColumns();
             for(int i=0 ; i< cols.size(); i++) {
                 final int j = i;
-                TableColumn newCol = new TableColumn(cols.get(i));
-                newCol.setCellValueFactory((Callback<TableColumn.CellDataFeatures<ObservableList, String>, ObservableValue<String>>) param ->
+                TableColumn<ObservableList<?>, String> newCol = new TableColumn<>(cols.get(i));
+                newCol.setCellValueFactory((Callback<TableColumn.CellDataFeatures<ObservableList<?>, String>, ObservableValue<String>>) param ->
                         new SimpleStringProperty(param.getValue().get(j).toString()));
                 tableView.getColumns().add(newCol);
             }
-            if (data.getColumns().size() > 0 && data.getRows().size() > 0) { //If it is now empty we can remove
+            if (!data.getColumns().isEmpty() && !data.getRows().isEmpty()) { //If it is now empty we can remove
                 TableColumn remove = new TableColumn("Remove");
                 remove.setCellFactory(
                         (Callback<TableColumn<Record, Boolean>, TableCell<Record, Boolean>>) p -> new ButtonCell());
@@ -124,10 +130,11 @@ public class Controller {
 
         //Dynamic Array
         ObservableList<ObservableList> rowData = FXCollections.observableArrayList();
-        data.getRows().forEach(row -> rowData.add(row));
+        rowData.addAll(data.getRows());
         tableView.getItems().setAll(rowData); //Refresh
     }
 
+    //Save the file, based on where it was uploaded
     public void save() {
         String pathString = currentPath.toString();
         try {
@@ -143,6 +150,7 @@ public class Controller {
         }
     }
 
+    //Called from main when the application is started, this starts everything.
     public void init () {
         refresh();
 

@@ -18,7 +18,7 @@
                   </VBox>
                   <HBox alignment="BOTTOM_CENTER" prefHeight="40.0" prefWidth="532.0">
                      <children>
-                        <Button mnemonicParsing="false" onAction="#onSubmit" prefHeight="33.0" prefWidth="54.0" text="Submit" textAlignment="CENTER" />
+                        <Button mnemonicParsing="false" onAction="#onSubmit" prefHeight="33.0" prefWidth="74.0" text="Submit" textAlignment="CENTER" />
                      </children>
                      <VBox.margin>
                         <Insets />
