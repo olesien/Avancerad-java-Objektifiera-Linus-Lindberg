@@ -21,6 +21,7 @@ public class JsonReadWrite {
     TableData read (Path path) throws FileNotFoundException {
         TableData tableData = new TableData();
 
+            //Read in the file and add it to a string
             File f = path.toFile();
             Scanner sc = new Scanner(f);
             String jsonString = "";
@@ -29,15 +30,16 @@ public class JsonReadWrite {
                 jsonString += line;
             }
             sc.close();
-            System.out.println(jsonString);
 
-
+            //Make it to an array, and loop through each
             JSONArray arr = new JSONArray(jsonString);
             for (int i = 0; i < arr.length(); i++)
             {
                 JSONObject object = arr.getJSONObject(i);
+                //If it's the first index, it should be treated as the column
                 if (i == 0) {
                     Iterator<String> keys = object.keys();
+                    //Loop through all keys
                     while(keys.hasNext()) {
                         String key = keys.next();
                         tableData.addCol((String) object.get(key));
@@ -46,12 +48,13 @@ public class JsonReadWrite {
                 } else {
                     ObservableList<String> row = FXCollections.observableArrayList();
                     Iterator<String> keys = object.keys();
+                    //Loop through all keys
                     while(keys.hasNext()) {
                         String key = keys.next();
-                        row.add((String) object.get(key));
+                        row.add((String) object.get(key)); //Convert to string
 
                     }
-                    tableData.addRow(row);
+                    tableData.addRow(row); //add the row
                 }
             }
         return tableData;
@@ -60,7 +63,7 @@ public class JsonReadWrite {
     void saveJSON(Path path, TableData data) {
         List<JSONObject> list = new ArrayList<>();
 
-        ArrayList columns = data.getColumns();
+        ArrayList<String> columns = data.getColumns();
         ArrayList<ObservableList<String>> rows = data.getRows();
 
         //Column Head
