@@ -1,6 +1,7 @@
 package edu.object.java23object;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.PrintWriter;
 import java.nio.file.Path;
@@ -15,11 +16,11 @@ import javafx.collections.ObservableList;
 import org.json.*;
 
 public class JsonReadWrite {
+    //This is used for the relation between the array indexes and the alphabet used in the JSON format.
     private String[] alphabet = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q"}; //That'll do
-    TableData read (Path path) {
+    TableData read (Path path) throws FileNotFoundException {
         TableData tableData = new TableData();
 
-        try {
             File f = path.toFile();
             Scanner sc = new Scanner(f);
             String jsonString = "";
@@ -53,9 +54,6 @@ public class JsonReadWrite {
                     tableData.addRow(row);
                 }
             }
-        } catch (Exception e) {
-            System.out.println("ERROR" + e.toString());
-        }
         return tableData;
     }
 

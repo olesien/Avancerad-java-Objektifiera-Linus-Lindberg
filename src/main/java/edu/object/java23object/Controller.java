@@ -37,6 +37,8 @@ public class Controller {
     @FXML
     private Button addDataBtn;
 
+    Alert alert = new Alert(Alert.AlertType.NONE); //Alert for error
+
     Stage stage;
 
     @FXML
@@ -91,11 +93,23 @@ public class Controller {
                     data = csvFileReader.parseLines(csvFileReader.readAllLines(path));
                     System.out.println(data.getRows());
                 } catch (Exception err) {
+                    //Display error
+                    alert.setAlertType(Alert.AlertType.ERROR);
+                    alert.setContentText("Something went wrong reading the CSV");
+                    alert.show();
                     System.out.println(err);
                 }
             } else if (extension.contains("json")) {
                 System.out.println("We have a JSON file");
-                data = json.read(path);
+                try {
+                    data = json.read(path);
+                } catch (Exception err) {
+                    alert.setAlertType(Alert.AlertType.ERROR);
+                    alert.setContentText("Something went wrong reading the JSON");
+                    alert.show();
+                    System.out.println(err);
+                }
+
             } else {
                 System.out.println("Invalid File");
             }
