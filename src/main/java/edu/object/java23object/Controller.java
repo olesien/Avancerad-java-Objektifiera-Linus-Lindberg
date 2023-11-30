@@ -81,8 +81,10 @@ public class Controller {
             setFileBtn.setText(file.getName());
             stage.setTitle("Inspecting " + file.getName());
             Path path = file.toPath();
-            String fileName = file.getPath();
-            if (fileName.contains(".csv")) {
+            
+            String[] arr = file.getName().split("\\.");
+            String extension = arr[arr.length - 1];
+            if (extension.contains("csv")) {
                 System.out.println("We have a CSV file");
                 // we have a csv
                 try {
@@ -91,7 +93,7 @@ public class Controller {
                 } catch (Exception err) {
                     System.out.println(err);
                 }
-            } else if (fileName.contains(".json")) {
+            } else if (extension.contains("json")) {
                 System.out.println("We have a JSON file");
                 data = json.read(path);
             } else {
