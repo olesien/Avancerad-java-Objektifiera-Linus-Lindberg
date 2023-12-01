@@ -22,9 +22,8 @@ import java.util.ArrayList;
 
 public class Controller {
 
-    CsvReadWriter csvFileReader = new CsvReadWriter();
+    ReadWriter readWriter = new ReadWriter();
     TableData data = new TableData();
-    JsonReadWrite json = new JsonReadWrite();
 
     Path currentPath = new File("").toPath(); //Make a dummy path
 
@@ -90,7 +89,7 @@ public class Controller {
                 System.out.println("We have a CSV file");
                 // we have a csv
                 try {
-                    data = csvFileReader.parseLines(csvFileReader.readAllLines(path));
+                    data = readWriter.readCSV(path);
                     System.out.println(data.getRows());
                 } catch (Exception err) {
                     //Display error
@@ -102,7 +101,7 @@ public class Controller {
             } else if (extension.contains("json")) {
                 System.out.println("We have a JSON file");
                 try {
-                    data = json.read(path);
+                    data = readWriter.readJSON(path);
                 } catch (Exception err) {
                     alert.setAlertType(Alert.AlertType.ERROR);
                     alert.setContentText("Something went wrong reading the JSON");
@@ -148,9 +147,9 @@ public class Controller {
         String pathString = currentPath.toString();
         try {
             if (pathString.contains(".csv")) {
-                csvFileReader.saveCSV(currentPath, data);
+                readWriter.writeCSV(currentPath, data);
             } else if (pathString.contains(".json")) {
-                json.saveJSON(currentPath, data);
+                readWriter.writeJSON(currentPath, data);
             } else {
                 System.out.println("Can not save because file not found");
             }
